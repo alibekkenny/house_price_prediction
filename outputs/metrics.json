@@ -1,5 +1,10 @@
 {
-    "DummyRegressor": {
+    "XGBoost": {
+        "rmse": "N/A",
+        "mae": "N/A",
+        "r2": "N/A"
+    },
+    "GradientBoost": {
         "rmse": "N/A",
         "mae": "N/A",
         "r2": "N/A"
@@ -9,17 +14,12 @@
         "mae": "N/A",
         "r2": "N/A"
     },
+    "DummyRegressor": {
+        "rmse": "N/A",
+        "mae": "N/A",
+        "r2": "N/A"
+    },
     "RandomForest": {
-        "rmse": "N/A",
-        "mae": "N/A",
-        "r2": "N/A"
-    },
-    "XGBoost": {
-        "rmse": "N/A",
-        "mae": "N/A",
-        "r2": "N/A"
-    },
-    "GradientBoost": {
         "rmse": "N/A",
         "mae": "N/A",
         "r2": "N/A"

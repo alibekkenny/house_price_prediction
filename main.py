@@ -31,11 +31,24 @@ def menu():
 def run():
     df = None
     state = 0
-    saved_models = {}    
+    saved_models = {}
+    scaler = None
+    selector = None
+    feature_columns = None
+    
+    # Load preprocessing objects if they exist
+    prep_file = os.path.join(MODEL_DIR, "preprocessing_objects.pkl")
+    if os.path.exists(prep_file):
+        prep_objects = joblib.load(prep_file)
+        scaler = prep_objects.get('scaler')
+        selector = prep_objects.get('selector')
+        feature_columns = prep_objects.get('feature_columns')
+        print("Loaded preprocessing objects")
+    
     if os.path.exists(MODEL_DIR):
         print("Checking for existing trained models...")
         for model_file in os.listdir(MODEL_DIR):
-            if model_file.endswith(".pkl"):
+            if model_file.endswith(".pkl") and model_file != "preprocessing_objects.pkl":
                 model_name = model_file.replace(".pkl", "")
                 model_path = os.path.join(MODEL_DIR, model_file)
                 try:
@@ -74,7 +87,7 @@ def run():
                 if state >= 3:
                     print("Data is already prepared.")
                     continue
-                elif state == 0:
+                if state == 0:
                     print("Load data first (option 1).")
                     continue
 
@@ -91,6 +104,18 @@ def run():
 
                 X_train_sel, X_val_sel, selector = select_k_best_features(X_train_scaled, y_train, X_val_scaled, k=20)
                 # X_train_rfe, X_val_rfe, selector = select_rfe_features(X_train_scaled, y_train, X_val_scaled, n_features=20)
+                
+                # Save preprocessing objects for later use
+                os.makedirs(MODEL_DIR, exist_ok=True)
+                prep_objects = {
+                    'scaler': scaler,
+                    'selector': selector,
+                    'feature_columns': feature_columns
+                }
+                prep_file = os.path.join(MODEL_DIR, "preprocessing_objects.pkl")
+                joblib.dump(prep_objects, prep_file)
+                print(f"Preprocessing objects saved to {prep_file}")
+                
                 state = 3
                 print("Data was cleaned, features added, encoded, scaled, and selected.")
 
